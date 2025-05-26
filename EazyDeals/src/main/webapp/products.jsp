@@ -8,40 +8,52 @@
 <%@page import="com.eazydeals.dao.ProductDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+
+<%!
+    // Hàm escape HTML để ngăn chặn XSS
+    public String escapeHtml(String s) {
+        if (s == null) return "";
+        return s.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#x27;");
+    }
+%>  
+
 <%
-User u = (User) session.getAttribute("activeUser");
-WishlistDao wishlistDao = new WishlistDao(ConnectionProvider.getConnection());
+    User u = (User) session.getAttribute("activeUser");
+    WishlistDao wishlistDao = new WishlistDao(ConnectionProvider.getConnection());
 
-String searchKey = request.getParameter("search");
-String catId = request.getParameter("category");
-CategoryDao categoryDao = new CategoryDao(ConnectionProvider.getConnection());
-String message = "";
-DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
-ProductDao productDao = new ProductDao(ConnectionProvider.getConnection());
-List<Product> prodList = null; 
-if (searchKey != null) {
-	if (!searchKey.isEmpty()) {
-		message = "Kết quả tìm kiếm của \"" + searchKey + "\"";
-	}else{
-		message = "Không tìm thấy";
-	}
-	prodList = productDao.getAllProductsBySearchKey(searchKey);
+    String searchKey = request.getParameter("search");
+    String catId = request.getParameter("category");
+    CategoryDao categoryDao = new CategoryDao(ConnectionProvider.getConnection());
+    String message = "";
+    DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
+    ProductDao productDao = new ProductDao(ConnectionProvider.getConnection());
+    List<Product> prodList = null; 
 
-} else if (catId != null && !(catId.trim().equals("0"))) {
-	prodList = productDao.getAllProductsByCategoryId(Integer.parseInt(catId.trim()));
-	message = "Kết quả tìm kiếm của \"" + categoryDao.getCategoryName(Integer.parseInt(catId.trim())) + "\"";
-} else {
-	prodList = productDao.getAllProducts();
-	message = "Tất cả sản phảm";
-}
+    if (searchKey != null) {
+        if (!searchKey.isEmpty()) {
+            message = "Kết quả tìm kiếm của \"" + searchKey + "\"";
+        } else {
+            message = "Không tìm thấy";
+        }
+        prodList = productDao.getAllProductsBySearchKey(searchKey);
 
-if (prodList != null && prodList.size() == 0) {
+    } else if (catId != null && !(catId.trim().equals("0"))) {
+        prodList = productDao.getAllProductsByCategoryId(Integer.parseInt(catId.trim()));
+        message = "Kết quả tìm kiếm của \"" + categoryDao.getCategoryName(Integer.parseInt(catId.trim())) + "\"";
+    } else {
+        prodList = productDao.getAllProducts();
+        message = "Tất cả sản phảm";
+    }
 
-	message = "Không có \""
-	+ (searchKey != null ? searchKey : categoryDao.getCategoryName(Integer.parseInt(catId.trim()))) + "\"";
-
-	prodList = productDao.getAllProducts();
-}
+    if (prodList != null && prodList.size() == 0) {
+        message = "Không có \"" 
+            + (searchKey != null ? searchKey : categoryDao.getCategoryName(Integer.parseInt(catId.trim()))) + "\"";
+        prodList = productDao.getAllProducts();
+    }
 %>
 <!DOCTYPE html>
 <html>
@@ -85,7 +97,7 @@ if (prodList != null && prodList.size() == 0) {
 	<%@include file="Components/navbar.jsp"%>
 
 	<!--show products-->
-	<h4 class="text-center mt-2"><%=message%></h4>
+	<h4 class="text-center mt-2"><%= escapeHtml (message) %></h4>
 	<div class="container-fluid my-3 px-5">
 
 		<div class="row row-cols-1 row-cols-md-4 g-3">
@@ -96,7 +108,7 @@ if (prodList != null && prodList.size() == 0) {
 
 				<div class="card h-100 px-2 py-2">
 					<div class="container text-center">
-						<img src="Product_imgs\<%=p.getProductImages()%>"
+						<img src="Product_imgs\<%=escapeHtml(p.getProductImages())%>"
 							class="card-img-top m-2"
 							style="max-width: 100%; max-height: 200px; width: auto;">
 						<div class="wishlist-icon">
@@ -130,16 +142,16 @@ if (prodList != null && prodList.size() == 0) {
 							%>
 
 						</div>
-						<h5 class="card-title text-center"><%=p.getProductName()%></h5>
+						<h5 class="card-title text-center"><%= escapeHtml(p.getProductName()) %></h5>
 
 						<div class="container text-center">
-							<span class="real-price"><%=decimalFormat.format(p.getProductPriceAfterDiscount())%> VND</span>&ensp;
-							<span class="product-price"><%=decimalFormat.format(p.getProductPrice())%> VND</span>&ensp;
-							<span class="product-discount"><%=p.getProductDiscount()%>&#37;off</span>
+							<span class="real-price"><%= decimalFormat.format(p.getProductPriceAfterDiscount()) %> VND</span>&ensp;
+							<span class="product-price"><%= decimalFormat.format(p.getProductPrice()) %> VND</span>&ensp;
+							<span class="product-discount"><%= p.getProductDiscount() %>&#37;off</span>
 						</div>
 						<div class="container text-center mb-2 mt-2">
 							<button type="button"
-								onclick="window.open('viewProduct.jsp?pid=<%=p.getProductId()%>', '_self')"
+								onclick="window.open('viewProduct.jsp?pid=<%= p.getProductId() %>', '_self')"
 								class="btn btn-primary text-white">Xem chi tiết</button>
 						</div>
 					</div>
@@ -152,4 +164,3 @@ if (prodList != null && prodList.size() == 0) {
 	</div>
 </body>
 </html>
-

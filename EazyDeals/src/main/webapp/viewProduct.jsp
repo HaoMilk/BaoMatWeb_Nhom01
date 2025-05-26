@@ -18,6 +18,17 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
 <html>
 <head>
 <meta charset="UTF-8">
+<%!
+    // Hàm escape HTML để ngăn chặn XSS
+    public String escapeHtml(String s) {
+        if (s == null) return "";
+        return s.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#x27;");
+    }
+%>
 <title>Chi tiết sản phẩm</title>
 <%@include file="Components/common_css_js.jsp"%>
 <style type="text/css">
@@ -63,15 +74,15 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
 		<div class="row border border-3">
 			<div class="col-md-6">
 				<div class="container-fluid text-end my-3">
-					<img src="Product_imgs\<%=product.getProductImages()%>"
+					<img src="Product_imgs\<%= product.getProductImages()%>"
 						class="card-img-top"
 						style="max-width: 100%; max-height: 500px; width: auto;">
 				</div>
 			</div>
 			<div class="col-md-6">
 				<div class="container-fluid my-5">
-					<h4><%=product.getProductName()%></h4>
-					<span class="fs-5"><b>Mô tả sản phẩm</b></span><br> <span><%=product.getProductDescription()%></span><br>
+					<h4><%= escapeHtml(product.getProductName())%></h4>
+					<span class="fs-5"><b>Mô tả sản phẩm</b></span><br> <span><%=escapeHtml(product.getProductDescription())%></span><br>
 					<span class="real-price"><%=decimalFormat.format(product.getProductPriceAfterDiscount())%>
 						VND</span>&ensp; <span class="product-price"><%=decimalFormat.format(product.getProductPrice())%>
 						VND</span>&ensp; <span class="product-discount"><%=product.getProductDiscount()%>&#37;off</span><br>
@@ -83,7 +94,7 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
  	out.println("Hết hàng");
  }
  %>
-					</span><br> <span class="fs-5"><b>Danh mục</b></span> <span><%=catDao.getCategoryName(product.getCategoryId())%></span>
+					</span><br> <span class="fs-5"><b>Danh mục</b></span> <span><%=escapeHtml(catDao.getCategoryName(product.getCategoryId()))%></span>
 					<div>
 						<span class="fs-5"><b>Màu sắc</b></span><br>
 						<div class="color-options">
@@ -149,58 +160,7 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
 		</div>
 	</div>
 
-	<!-- Mục đánh giá -->
-	<div class="container mt-5">
-		<h4><b>Đánh giá sản phẩm</b></h4>
-		<form method="post" action="SubmitReviewServlet">
-			<div class="form-group">
-				<label for="review">Nhập đánh giá của bạn:</label>
-				<textarea id="review" name="review" class="form-control" rows="3" required></textarea>
-			</div>
-			<div class="form-group">
-				<label for="rating">Chọn số sao:</label>
-				<select id="rating" name="rating" class="form-control" required>
-					<option value="1">1 sao</option>
-					<option value="2">2 sao</option>
-					<option value="3">3 sao</option>
-					<option value="4">4 sao</option>
-					<option value="5">5 sao</option>
-				</select>
-			</div>
-			<input type="hidden" name="pid" value="<%= productId %>"> <!-- Thêm productId vào form -->
-			<button type="submit" class="btn btn-primary">Gửi đánh giá</button>
-		</form>
-
-		<h5>Danh sách đánh giá:</h5>
-		<div class="rating">
-			<span>&#9733;</span>
-			<span>&#9733;</span>
-			<span>&#9733;</span>
-			<span>&#9733;</span>
-			<span>&#9734;</span>
-		</div>
-		<p>Rất tốt</p>
-		<div class="rating">
-			<span>&#9733;</span>
-			<span>&#9733;</span>
-			<span>&#9733;</span>
-			<span>&#9733;</span>
-			<span>&#9733;</span>
-
-		</div>
-		<p>Rất hài lòng</p>
-		<ul>
-			<%
-				List<Review> reviewList = SubmitReviewServlet.getReviews();
-				for (Review rev : reviewList) {
-			%>
-				<li><strong><%= rev.getRating() %> sao:</strong> <%= rev.getReviewText() %></li>
-			<%
-				}
-			%>
-		</ul>
-	</div>
-
+	
 	<script>
 		$(document)
 				.ready(
