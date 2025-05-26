@@ -8,7 +8,7 @@
 <%@page import="com.eazydeals.dao.ProductDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%
+<%-- <%
 User u = (User) session.getAttribute("activeUser");
 WishlistDao wishlistDao = new WishlistDao(ConnectionProvider.getConnection());
 
@@ -40,6 +40,50 @@ if (prodList != null && prodList.size() == 0) {
 	message = "Không có \""
 	+ (searchKey != null ? searchKey : categoryDao.getCategoryName(Integer.parseInt(catId.trim()))) + "\"";
 
+	prodList = productDao.getAllProducts();
+}
+%> --%>
+<%
+User u = (User) session.getAttribute("activeUser");
+WishlistDao wishlistDao = new WishlistDao(ConnectionProvider.getConnection());
+
+String searchKey = request.getParameter("search");
+String catIdRaw = request.getParameter("category");
+Integer catId = null;
+
+try {
+    if (catIdRaw != null && !catIdRaw.trim().isEmpty() && catIdRaw.trim().length() <= 5) {
+        catId = Integer.parseInt(catIdRaw.trim());
+    }
+} catch (NumberFormatException e) {
+    catId = null; // fallback nếu có lỗi
+}
+
+CategoryDao categoryDao = new CategoryDao(ConnectionProvider.getConnection());
+String message = "";
+DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
+ProductDao productDao = new ProductDao(ConnectionProvider.getConnection());
+List<Product> prodList = null; 
+
+if (searchKey != null) {
+	if (!searchKey.isEmpty()) {
+		message = "Kết quả tìm kiếm của \"" + searchKey + "\"";
+	} else {
+		message = "Không tìm thấy";
+	}
+	prodList = productDao.getAllProductsBySearchKey(searchKey);
+
+} else if (catId != null && catId != 0) {
+	prodList = productDao.getAllProductsByCategoryId(catId);
+	message = "Kết quả tìm kiếm của \"" + categoryDao.getCategoryName(catId) + "\"";
+} else {
+	prodList = productDao.getAllProducts();
+	message = "Tất cả sản phẩm";
+}
+
+if (prodList != null && prodList.size() == 0) {
+	String fallbackKey = (searchKey != null) ? searchKey : (catId != null ? categoryDao.getCategoryName(catId) : "Không rõ");
+	message = "Không có \"" + fallbackKey + "\"";
 	prodList = productDao.getAllProducts();
 }
 %>
