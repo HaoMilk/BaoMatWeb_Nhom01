@@ -9,7 +9,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
-<%!
+<%
+User u = (User) session.getAttribute("activeUser");
+WishlistDao wishlistDao = new WishlistDao(ConnectionProvider.getConnection());
+
+String searchKey = request.getParameter("search");
+String catIdRaw = request.getParameter("category");
+Integer catId = null;
+
     // Hàm escape HTML để ngăn chặn XSS
     public String escapeHtml(String s) {
         if (s == null) return "";
@@ -19,41 +26,42 @@
                 .replace("\"", "&quot;")
                 .replace("'", "&#x27;");
     }
-%>  
 
-<%
-    User u = (User) session.getAttribute("activeUser");
-    WishlistDao wishlistDao = new WishlistDao(ConnectionProvider.getConnection());
-
-    String searchKey = request.getParameter("search");
-    String catId = request.getParameter("category");
-    CategoryDao categoryDao = new CategoryDao(ConnectionProvider.getConnection());
-    String message = "";
-    DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
-    ProductDao productDao = new ProductDao(ConnectionProvider.getConnection());
-    List<Product> prodList = null; 
-
-    if (searchKey != null) {
-        if (!searchKey.isEmpty()) {
-            message = "Kết quả tìm kiếm của \"" + searchKey + "\"";
-        } else {
-            message = "Không tìm thấy";
-        }
-        prodList = productDao.getAllProductsBySearchKey(searchKey);
-
-    } else if (catId != null && !(catId.trim().equals("0"))) {
-        prodList = productDao.getAllProductsByCategoryId(Integer.parseInt(catId.trim()));
-        message = "Kết quả tìm kiếm của \"" + categoryDao.getCategoryName(Integer.parseInt(catId.trim())) + "\"";
-    } else {
-        prodList = productDao.getAllProducts();
-        message = "Tất cả sản phảm";
+try {
+    if (catIdRaw != null && !catIdRaw.trim().isEmpty() && catIdRaw.trim().length() <= 5) {
+        catId = Integer.parseInt(catIdRaw.trim());
     }
+} catch (NumberFormatException e) {
+    catId = null; // fallback nếu có lỗi
+}
 
-    if (prodList != null && prodList.size() == 0) {
-        message = "Không có \"" 
-            + (searchKey != null ? searchKey : categoryDao.getCategoryName(Integer.parseInt(catId.trim()))) + "\"";
-        prodList = productDao.getAllProducts();
-    }
+CategoryDao categoryDao = new CategoryDao(ConnectionProvider.getConnection());
+String message = "";
+DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
+ProductDao productDao = new ProductDao(ConnectionProvider.getConnection());
+List<Product> prodList = null; 
+
+if (searchKey != null) {
+	if (!searchKey.isEmpty()) {
+		message = "Kết quả tìm kiếm của \"" + searchKey + "\"";
+	} else {
+		message = "Không tìm thấy";
+	}
+	prodList = productDao.getAllProductsBySearchKey(searchKey);
+
+} else if (catId != null && catId != 0) {
+	prodList = productDao.getAllProductsByCategoryId(catId);
+	message = "Kết quả tìm kiếm của \"" + categoryDao.getCategoryName(catId) + "\"";
+} else {
+	prodList = productDao.getAllProducts();
+	message = "Tất cả sản phẩm";
+}
+
+if (prodList != null && prodList.size() == 0) {
+	String fallbackKey = (searchKey != null) ? searchKey : (catId != null ? categoryDao.getCategoryName(catId) : "Không rõ");
+	message = "Không có \"" + fallbackKey + "\"";
+	prodList = productDao.getAllProducts();
+}
 %>
 <!DOCTYPE html>
 <html>

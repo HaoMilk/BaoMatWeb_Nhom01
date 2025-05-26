@@ -8,7 +8,14 @@
 	pageEncoding="UTF-8"%>
 <%@page import="java.text.DecimalFormat"%>
 <%
-int productId = Integer.parseInt(request.getParameter("pid"));
+/* int productId = Integer.parseInt(request.getParameter("pid")); --dòng này gây lỗi Buffer Overflow do tham số quá dài trong URL đầu vào*/
+int productId = 0;
+try {
+    productId = Integer.parseInt(request.getParameter("pid"));
+} catch (NumberFormatException | NullPointerException e) {
+    response.sendRedirect("error_exception.jsp");
+    return;
+}
 ProductDao productDao = new ProductDao(ConnectionProvider.getConnection());
 Product product = (Product) productDao.getProductsByProductId(productId);
 DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
