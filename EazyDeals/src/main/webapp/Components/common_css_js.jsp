@@ -1,5 +1,6 @@
 <!-- CSS -->
 <link href="CSS/bootstrap.min.css" rel="stylesheet" />
+<link href="CSS/font-awesome.min.css" rel="stylesheet" />
 <link href="CSS/all.min.css" rel="stylesheet" />
 <link href="CSS/style.css" rel="stylesheet" />
 
