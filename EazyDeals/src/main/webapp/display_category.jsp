@@ -35,7 +35,7 @@ if (activeAdmin == null) {
 			for (Category c : categoryList) {
 			%>
 			<tr class="text-center">
-				<td><img src="Product_imgs\<%=c.getCategoryImage()%>"
+				<td><img src="Product_imgs/<%=c.getCategoryImage()%>"
 					style="width: 60px; height: 60px; width: auto;"></td>
 				<td><%=c.getCategoryName()%></td>
 				<td><a href="update_category.jsp?cid=<%=c.getCategoryId()%>" role="button" class="btn btn-secondary">Sửa</a>&emsp;<a

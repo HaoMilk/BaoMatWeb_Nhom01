@@ -137,6 +137,9 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
 						</div>
 					</div>
 					<form method="post">
+						
+						<%@ include file="Components/csrf.jsp" %>
+					
 						<div class="container-fluid text-center mt-3">
 							<%
 							if (user == null) {
@@ -167,7 +170,7 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
 		</div>
 	</div>
 
-	
+
 	<script>
 		$(document)
 				.ready(

@@ -36,6 +36,9 @@ if (activeAdmin == null) {
 					</div>
 					<form action="AddOperationServlet?cid=<%=cid%>" method="post"
 						enctype="multipart/form-data">
+						
+						<%@ include file="Components/csrf.jsp" %>
+						
 						<div class="card-body">
 							<input type="hidden" name="operation" value="updateCategory">
 							<div class="mb-3">
@@ -47,7 +50,7 @@ if (activeAdmin == null) {
 							</div>
 							<div class="mb-3">
 								<label class="form-label"><b>Tải hình ảnh lên &nbsp;</b></label><%=category.getCategoryImage()%>&emsp;<img
-									src="Product_imgs\<%=category.getCategoryImage()%>"
+									src="Product_imgs/<%=category.getCategoryImage()%>"
 									style="width: 80px; height: 80px; width: auto;">
 								<input type="hidden" name="image" value="<%=category.getCategoryImage()%>">
 							</div>

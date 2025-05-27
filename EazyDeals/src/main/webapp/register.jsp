@@ -31,6 +31,9 @@ label {
 
 						<!--registration-form-->
 						<form id="register-form" action="RegisterServlet" method="post">
+						
+							<%@ include file="Components/csrf.jsp" %>
+						
 							<div class="row">
 								<div class="col-md-6 mt-2">
 									<label class="form-label">Họ và tên</label> <input type="text"

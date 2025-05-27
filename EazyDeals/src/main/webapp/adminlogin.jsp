@@ -33,6 +33,8 @@ label {
 						<form id="login-form" action="LoginServlet" method="post">
 							<input type="hidden" name="login" value="admin"> 
 							
+							<%@ include file="Components/csrf.jsp" %>
+							
 							<div class="mb-3">
 								<label class="form-label">Email</label> <input type="email"
 									name="email" placeholder="Nhập địa chỉ email" class="form-control"

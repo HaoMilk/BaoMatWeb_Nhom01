@@ -30,6 +30,9 @@ label {
 						<%@include file="Components/alert_message.jsp"%>
 
 						<form action="ChangePasswordServlet" method="post">
+						
+						<%@ include file="Components/csrf.jsp" %>
+						
 							<div class="mb-3">
 								<label class="form-label">OTP</label> <input type="number"
 									name="code" placeholder="Nhập mã xác nhận" class="form-control"

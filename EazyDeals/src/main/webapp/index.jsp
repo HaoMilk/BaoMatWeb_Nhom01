@@ -59,7 +59,7 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
 						style="text-decoration: none;">
 						<div class="card cus-card h-100">
 							<div class="container text-center">
-								<img src="Product_imgs\<%=c.getCategoryImage()%>" class="mt-3 "
+								<img src="Product_imgs/<%=c.getCategoryImage()%>" class="mt-3 "
 									style="max-width: 100%; max-height: 100px; width: auto; height: auto;">
 							</div>
 							<h6><%=c.getCategoryName()%></h6>
@@ -92,7 +92,7 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
 			<div class="col">
 				<div class="container text-center px-5 py-5">
 					<h1>Những sản phẩm mới nhất</h1>
-					<img src="Images\shoes.jpg" class="card-img-top"
+					<img src="Images/shoes.jpg" class="card-img-top"
 						style="max-width: 100%; max-height: 200px; width: auto;">
 				</div>
 			</div>
@@ -105,7 +105,7 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
 					<div class="card h-100">
 						<div class="container text-center">
 							<img
-								src="Product_imgs\<%=productList.get(i).getProductImages()%>"
+								src="Product_imgs/<%=productList.get(i).getProductImages()%>"
 								class="card-img-top m-2"
 								style="max-width: 100%; max-height: 200px; width: auto;">
 						</div>

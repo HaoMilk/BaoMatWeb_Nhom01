@@ -79,7 +79,7 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
 						Product prod = productDao.getProductsByProductId(c.getProductId());						
 					%>
 					<tr class="text-center">
-						<td><img src="Product_imgs\<%=prod.getProductImages()%>"
+						<td><img src="Product_imgs/<%=prod.getProductImages()%>"
 							style="width: 50px; height: 50px; width: auto;"></td>
 						<td class="text-start"><%=prod.getProductName()%></td>
 						<td><%=decimalFormat.format(prod.getProductPriceAfterDiscount())%> VND</td>
