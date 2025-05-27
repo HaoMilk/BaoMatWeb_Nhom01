@@ -81,7 +81,7 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
 		<div class="row border border-3">
 			<div class="col-md-6">
 				<div class="container-fluid text-end my-3">
-					<img src="Product_imgs\<%= product.getProductImages()%>"
+					<img src="Product_imgs/<%= product.getProductImages()%>"
 						class="card-img-top"
 						style="max-width: 100%; max-height: 500px; width: auto;">
 				</div>
