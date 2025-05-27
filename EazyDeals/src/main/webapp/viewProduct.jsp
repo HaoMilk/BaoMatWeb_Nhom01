@@ -8,7 +8,14 @@
 	pageEncoding="UTF-8"%>
 <%@page import="java.text.DecimalFormat"%>
 <%
-int productId = Integer.parseInt(request.getParameter("pid"));
+/* int productId = Integer.parseInt(request.getParameter("pid")); --dòng này gây lỗi Buffer Overflow do tham số quá dài trong URL đầu vào*/
+int productId = 0;
+try {
+    productId = Integer.parseInt(request.getParameter("pid"));
+} catch (NumberFormatException | NullPointerException e) {
+    response.sendRedirect("error_exception.jsp");
+    return;
+}
 ProductDao productDao = new ProductDao(ConnectionProvider.getConnection());
 Product product = (Product) productDao.getProductsByProductId(productId);
 DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
@@ -18,6 +25,17 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
 <html>
 <head>
 <meta charset="UTF-8">
+<%!
+    // Hàm escape HTML để ngăn chặn XSS
+    public String escapeHtml(String s) {
+        if (s == null) return "";
+        return s.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#x27;");
+    }
+%>
 <title>Chi tiết sản phẩm</title>
 <%@include file="Components/common_css_js.jsp"%>
 <style type="text/css">
@@ -63,15 +81,15 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
 		<div class="row border border-3">
 			<div class="col-md-6">
 				<div class="container-fluid text-end my-3">
-					<img src="Product_imgs/<%=product.getProductImages()%>"
+					<img src="Product_imgs\<%= product.getProductImages()%>"
 						class="card-img-top"
 						style="max-width: 100%; max-height: 500px; width: auto;">
 				</div>
 			</div>
 			<div class="col-md-6">
 				<div class="container-fluid my-5">
-					<h4><%=product.getProductName()%></h4>
-					<span class="fs-5"><b>Mô tả sản phẩm</b></span><br> <span><%=product.getProductDescription()%></span><br>
+					<h4><%= escapeHtml(product.getProductName())%></h4>
+					<span class="fs-5"><b>Mô tả sản phẩm</b></span><br> <span><%=escapeHtml(product.getProductDescription())%></span><br>
 					<span class="real-price"><%=decimalFormat.format(product.getProductPriceAfterDiscount())%>
 						VND</span>&ensp; <span class="product-price"><%=decimalFormat.format(product.getProductPrice())%>
 						VND</span>&ensp; <span class="product-discount"><%=product.getProductDiscount()%>&#37;off</span><br>
@@ -83,7 +101,7 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
  	out.println("Hết hàng");
  }
  %>
-					</span><br> <span class="fs-5"><b>Danh mục</b></span> <span><%=catDao.getCategoryName(product.getCategoryId())%></span>
+					</span><br> <span class="fs-5"><b>Danh mục</b></span> <span><%=escapeHtml(catDao.getCategoryName(product.getCategoryId()))%></span>
 					<div>
 						<span class="fs-5"><b>Màu sắc</b></span><br>
 						<div class="color-options">
@@ -151,7 +169,6 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
 			</div>
 		</div>
 	</div>
-
 
 
 	<script>
