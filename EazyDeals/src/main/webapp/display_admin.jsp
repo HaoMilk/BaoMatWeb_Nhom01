@@ -43,6 +43,9 @@ label {
 
 						<!--admin-form-->
 						<form action="AdminServlet?operation=save" method="post">
+						
+						<%@ include file="Components/csrf.jsp" %>
+						
 							<div class="mb-3">
 								<label class="form-label">Tên</label> <input type="text"
 									name="name" placeholder="Nhập tên" class="form-control"

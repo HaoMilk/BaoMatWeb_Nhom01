@@ -32,6 +32,9 @@ label {
 
 						<!--change password-->
 						<form action="ChangePasswordServlet" method="post">
+						
+							<%@ include file="Components/csrf.jsp" %>
+						
 							<div class="mb-3">
 								<label class="form-label">Email</label> <input type="email"
 									name="email" placeholder="Nhập địa chỉ email" class="form-control"

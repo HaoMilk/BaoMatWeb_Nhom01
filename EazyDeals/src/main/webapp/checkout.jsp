@@ -67,6 +67,9 @@ String from = (String)session.getAttribute("from");
 							</div>
 						</div>
 						<form action="OrderOperationServlet" method="post">
+						
+						<%@ include file="Components/csrf.jsp" %>
+						
 							<div class="form-check mt-2">
 								<input class="form-check-input" type="radio" name="payementMode"
 									value="Card Payment" required><label class="form-check-label">Credit
@@ -190,6 +193,9 @@ String from = (String)session.getAttribute("from");
 						aria-label="Close"></button>
 				</div>
 				<form action="UpdateUserServlet" method="post">
+				
+					<%@ include file="Components/csrf.jsp" %>
+				
 					<input type="hidden" name="operation" value="changeAddress">
 					<div class="modal-body mx-3">
 						<div class="mt-2">

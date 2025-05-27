@@ -135,6 +135,9 @@ a {
 				</div>
 				<form action="AddOperationServlet" method="post"
 					enctype="multipart/form-data">
+					
+					<%@ include file="Components/csrf.jsp" %>
+					
 					<div class="modal-body">
 						<input type="hidden" name="operation" value="addCategory">
 
@@ -171,6 +174,9 @@ a {
 				</div>
 				<form action="AddOperationServlet" method="post"
 					name="addProductForm" enctype="multipart/form-data">
+					
+					<%@ include file="Components/csrf.jsp" %>
+					
 					<div class="modal-body">
 						<input type="hidden" name="operation" value="addProduct">
 						<div>

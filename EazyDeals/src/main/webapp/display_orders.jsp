@@ -68,9 +68,12 @@ UserDao userDao = new UserDao(ConnectionProvider.getConnection());
 				%>
 				<form action="UpdateOrderServlet?oid=<%=order.getId()%>"
 					method="post">
+					
+					<%@ include file="Components/csrf.jsp" %>
+					
 				<tr>
 					<td class="text-center"><img
-						src="Product_imgs\<%=orderProduct.getImage()%>"
+						src="Product_imgs/<%=orderProduct.getImage()%>"
 						style="width: 50px; height: 50px; width: auto;"></td>
 					<td><%=order.getOrderId()%></td>
 					<td><%=orderProduct.getName()%><br>Quantity: <%=orderProduct.getQuantity()%><br>Total

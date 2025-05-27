@@ -30,6 +30,9 @@ label {
 						<%@include file="Components/alert_message.jsp"%>
 
 						<form action="ChangePasswordServlet" method="post">
+							
+							<%@ include file="Components/csrf.jsp" %>
+							
 							<div class="mb-3 mt-3">
 								<label class="form-label">Mật khẩu mới</label> <input
 									type="password" name="password" id="password"

@@ -63,7 +63,7 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
 		<div class="row border border-3">
 			<div class="col-md-6">
 				<div class="container-fluid text-end my-3">
-					<img src="Product_imgs\<%=product.getProductImages()%>"
+					<img src="Product_imgs/<%=product.getProductImages()%>"
 						class="card-img-top"
 						style="max-width: 100%; max-height: 500px; width: auto;">
 				</div>
@@ -119,6 +119,9 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
 						</div>
 					</div>
 					<form method="post">
+						
+						<%@ include file="Components/csrf.jsp" %>
+					
 						<div class="container-fluid text-center mt-3">
 							<%
 							if (user == null) {
@@ -149,57 +152,7 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
 		</div>
 	</div>
 
-	<!-- Mục đánh giá -->
-	<div class="container mt-5">
-		<h4><b>Đánh giá sản phẩm</b></h4>
-		<form method="post" action="SubmitReviewServlet">
-			<div class="form-group">
-				<label for="review">Nhập đánh giá của bạn:</label>
-				<textarea id="review" name="review" class="form-control" rows="3" required></textarea>
-			</div>
-			<div class="form-group">
-				<label for="rating">Chọn số sao:</label>
-				<select id="rating" name="rating" class="form-control" required>
-					<option value="1">1 sao</option>
-					<option value="2">2 sao</option>
-					<option value="3">3 sao</option>
-					<option value="4">4 sao</option>
-					<option value="5">5 sao</option>
-				</select>
-			</div>
-			<input type="hidden" name="pid" value="<%= productId %>"> <!-- Thêm productId vào form -->
-			<button type="submit" class="btn btn-primary">Gửi đánh giá</button>
-		</form>
 
-		<h5>Danh sách đánh giá:</h5>
-		<div class="rating">
-			<span>&#9733;</span>
-			<span>&#9733;</span>
-			<span>&#9733;</span>
-			<span>&#9733;</span>
-			<span>&#9734;</span>
-		</div>
-		<p>Rất tốt</p>
-		<div class="rating">
-			<span>&#9733;</span>
-			<span>&#9733;</span>
-			<span>&#9733;</span>
-			<span>&#9733;</span>
-			<span>&#9733;</span>
-
-		</div>
-		<p>Rất hài lòng</p>
-		<ul>
-			<%
-				List<Review> reviewList = SubmitReviewServlet.getReviews();
-				for (Review rev : reviewList) {
-			%>
-				<li><strong><%= rev.getRating() %> sao:</strong> <%= rev.getReviewText() %></li>
-			<%
-				}
-			%>
-		</ul>
-	</div>
 
 	<script>
 		$(document)

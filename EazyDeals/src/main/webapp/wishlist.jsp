@@ -47,7 +47,7 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
 				Product p = pDao.getProductsByProductId(w.getProductId());
 			%>
 			<tr class="text-center">
-				<td><img src="Product_imgs\<%=p.getProductImages()%>"
+				<td><img src="Product_imgs/<%=p.getProductImages()%>"
 					style="width: 50px; height: 50px; width: auto;"></td>
 				<td class="text-start"><%=p.getProductName()%></td>
 				<td><%=decimalFormat.format(p.getProductPriceAfterDiscount())%> VND</td>
